@@ -1,10 +1,18 @@
 using UnityEngine;
 using System.Collections;
 
+//Zmienilem GetKeyDown na GetKey
+//Zienilem predkosc na 3
+
 public class Player : MonoBehaviour
 {
     public int              playerNumber;
     public float            playerSpeed;
+
+    public ColisionTrigger  colTriUp;
+    public ColisionTrigger  colTriDown;
+    public ColisionTrigger  colTriLeft;
+    public ColisionTrigger  colTriRight;
 
     private MainController  mainController;
     private bool            moving;
@@ -26,25 +34,25 @@ public class Player : MonoBehaviour
 
     void WaitForMove()
     {
-        if (Input.GetKeyDown(mainController.playersKeys[playerNumber].up))
+        if (!colTriUp.playerTouch && !colTriUp.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].up))
         {
             moving = true;
             target = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1f);
         }
 
-        if (Input.GetKeyDown(mainController.playersKeys[playerNumber].down))
+        if (!colTriDown.playerTouch && !colTriDown.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].down))
         {
             moving = true;
             target = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f);
         }
 
-        if (Input.GetKeyDown(mainController.playersKeys[playerNumber].left))
+        if (!colTriLeft.playerTouch && !colTriLeft.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].left))
         {
             moving = true;
             target = new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z);
         }
 
-        if (Input.GetKeyDown(mainController.playersKeys[playerNumber].right))
+        if (!colTriRight.playerTouch && !colTriRight.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].right))
         {
             moving = true;
             target = new Vector3(transform.position.x + 1f, transform.position.y, transform.position.z);

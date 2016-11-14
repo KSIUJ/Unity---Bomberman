@@ -1,24 +1,31 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GameController : MonoBehaviour
 {
-    public int          lvlSize;
-    public int          playersNumber;
-    public GameObject   hardWall;
-    public GameObject   floor;
-    public GameObject   player;
+    public int              lvlSize;
+    public int              playersNumber;
+    public GameObject       hardWall;
+    public GameObject       floor;
+    public GameObject       player;
+    public GameObject       softWall;
+
+    private List<Vector3>   softWallPositions;
 
     void Awake()
     {
-        lvlSize         = 0;
-        playersNumber   = 4;
+        lvlSize             = 2;
+        playersNumber       = 4;
+        softWallPositions   = new List<Vector3>();
     }
 
     void Start()
     {
         CreateLvl();
         SpanPlayers();
+		FillSoftWallsList(); //Zmiana
+		Tester();
     }
 
     void CreateLvl()
@@ -78,4 +85,67 @@ public class GameController : MonoBehaviour
         }
             
     }
+
+    void FillSoftWallsList()
+    {
+        if (playersNumber >= 2)
+        {
+            for (int i = 3; i >= -3; --i)
+                softWallPositions.Add(new Vector3(1f, 0f, i));
+
+            for (int i = 3; i >= -3; i -= 2)
+                softWallPositions.Add(new Vector3(2f, 0f, i));
+        }
+        else
+        {
+			for (int i = 3; i >= -5; --i)
+				softWallPositions.Add(new Vector3(1f, 0f, i));
+
+			for (int i = 3; i >= -5; i -= 2)
+				softWallPositions.Add(new Vector3(2f, 0f, i));
+		}
+
+        if(playersNumber == 4)
+        {
+			for (int i = 3; i >= -3; --i)
+				softWallPositions.Add(new Vector3(13f + lvlSize, 0f, i));
+
+			for (int i = 3; i >= -3; i -= 2)
+				softWallPositions.Add(new Vector3(12f + lvlSize, 0f, i));
+        }
+		else if(playersNumber == 3)
+		{
+			for (int i = 3; i >= -5; --i)
+				softWallPositions.Add(new Vector3(13f + lvlSize, 0f, i));
+
+			for (int i = 3; i >= -5; i -= 2)
+				softWallPositions.Add(new Vector3(12f + lvlSize, 0f, i));
+		}
+		else
+		{
+			for (int i = 5; i >= -5; --i)
+				softWallPositions.Add(new Vector3(13f + lvlSize, 0f, i));
+
+			for (int i = 5; i >= -5; i -= 2)
+				softWallPositions.Add(new Vector3(12f + lvlSize, 0f, i));
+		}
+
+		
+        for (int i = 3; i <= 11 + lvlSize; ++i)
+        {
+            for(int j = 5; j >= -5; --j)
+			{
+				if((i % 2 != 0) || ((i % 2 == 0) && (Mathf.Abs(j % 2) == 1)))
+					softWallPositions.Add(new Vector3(i, 0f, j));
+			}
+				
+		}
+    }
+
+	void Tester()
+	{
+		for (int i = 0; i < softWallPositions.Count; ++i)
+			Instantiate(softWall, softWallPositions[i], Quaternion.identity);
+	}
+
 }
