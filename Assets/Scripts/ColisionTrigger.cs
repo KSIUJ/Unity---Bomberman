@@ -5,11 +5,13 @@ public class ColisionTrigger : MonoBehaviour
 {
     public bool hardWallTouch;
     public bool playerTouch;
+    public bool softWallTouch;
 
     void Awake()
     {
         hardWallTouch   = false;
         playerTouch     = false;
+        softWallTouch   = false;
     }
 
     void OnTriggerStay(Collider other)
@@ -19,6 +21,9 @@ public class ColisionTrigger : MonoBehaviour
 
         if (other.tag == Tags.player)
             playerTouch     = true;
+
+        if (other.tag == Tags.softWall)
+            softWallTouch = true;
     }
 
     void OnTriggerExit(Collider other)
@@ -28,5 +33,8 @@ public class ColisionTrigger : MonoBehaviour
 
         if (other.tag == Tags.player)
             playerTouch     = false;
+
+        if (other.tag == Tags.softWall)
+            softWallTouch = false;
     }
 }

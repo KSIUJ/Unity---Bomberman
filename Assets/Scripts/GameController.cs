@@ -24,8 +24,8 @@ public class GameController : MonoBehaviour
     {
         CreateLvl();
         SpanPlayers();
-		FillSoftWallsList(); //Zmiana
-		Tester();
+		FillSoftWallsList();
+        PutSoftWalls();
     }
 
     void CreateLvl()
@@ -137,15 +137,22 @@ public class GameController : MonoBehaviour
 			{
 				if((i % 2 != 0) || ((i % 2 == 0) && (Mathf.Abs(j % 2) == 1)))
 					softWallPositions.Add(new Vector3(i, 0f, j));
-			}
-				
+			}	
 		}
     }
 
-	void Tester()
-	{
-		for (int i = 0; i < softWallPositions.Count; ++i)
-			Instantiate(softWall, softWallPositions[i], Quaternion.identity);
-	}
+    void PutSoftWalls()
+    {
+        int softWallsNumer = (int) (softWallPositions.Count * 0.9f);
+
+        for(int i = 0; i < softWallsNumer; ++i)
+        {
+            int tmp = Random.Range(0, softWallPositions.Count);
+
+            Instantiate(softWall, softWallPositions[tmp], Quaternion.identity);
+
+            softWallPositions.RemoveAt(tmp);
+        }
+    }
 
 }

@@ -1,9 +1,6 @@
 using UnityEngine;
 using System.Collections;
 
-//Zmienilem GetKeyDown na GetKey
-//Zienilem predkosc na 3
-
 public class Player : MonoBehaviour
 {
     public int              playerNumber;
@@ -14,14 +11,20 @@ public class Player : MonoBehaviour
     public ColisionTrigger  colTriLeft;
     public ColisionTrigger  colTriRight;
 
+    public GameObject       bomb;
+
     private MainController  mainController;
     private bool            moving;
     private Vector3         target;
+    private int             bombsOnMap;
+    private int             bombsLimit;
 
     void Awake()
     {
-        moving = false;
-        mainController = GameObject.FindGameObjectWithTag(Tags.mainController).GetComponent<MainController>();
+        moving          = false;
+        mainController  = GameObject.FindGameObjectWithTag(Tags.mainController).GetComponent<MainController>();
+        bombsOnMap      = 0;
+        bombsLimit      = 1;
     }
 
     void Update()
@@ -30,29 +33,31 @@ public class Player : MonoBehaviour
             WaitForMove();
         else
             Moving();
+
+        WaitForBomb();
     }
 
     void WaitForMove()
     {
-        if (!colTriUp.playerTouch && !colTriUp.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].up))
+        if (!colTriUp.softWallTouch && !colTriUp.playerTouch && !colTriUp.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].up))
         {
             moving = true;
             target = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1f);
         }
 
-        if (!colTriDown.playerTouch && !colTriDown.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].down))
+        if (!colTriDown.softWallTouch && !colTriDown.playerTouch && !colTriDown.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].down))
         {
             moving = true;
             target = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f);
         }
 
-        if (!colTriLeft.playerTouch && !colTriLeft.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].left))
+        if (!colTriLeft.softWallTouch && !colTriLeft.playerTouch && !colTriLeft.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].left))
         {
             moving = true;
             target = new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z);
         }
 
-        if (!colTriRight.playerTouch && !colTriRight.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].right))
+        if (!colTriRight.softWallTouch && !colTriRight.playerTouch && !colTriRight.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].right))
         {
             moving = true;
             target = new Vector3(transform.position.x + 1f, transform.position.y, transform.position.z);
@@ -65,5 +70,20 @@ public class Player : MonoBehaviour
 
         if (transform.position == target)
             moving = false;
+    }
+
+    void WaitForBomb()
+    {
+        if(!moving && Input.GetKeyDown(mainController.playersKeys[playerNumber].putBomb) && bombsOnMap < bombsLimit)
+        {
+            GameObject bombObj = Instantiate(bomb, transform.position, Quaternion.identity) as GameObject;
+            bombObj.GetComponent<Bomb>().SetUpOwner(gameObject);
+            ++bombsOnMap;
+        }
+    }
+
+    public void ReturnOneBomb()
+    {
+        --bombsOnMap;
     }
 }
