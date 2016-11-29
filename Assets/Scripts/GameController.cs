@@ -13,7 +13,7 @@ public class GameController : MonoBehaviour
 
     private List<Vector3>   softWallPositions;
 
-    void Awake()
+    private void Awake()
     {
         lvlSize             = 2;
         playersNumber       = 4;
@@ -30,7 +30,7 @@ public class GameController : MonoBehaviour
 
     void CreateLvl()
     {
-        for(int i = 0; i < lvlSize; ++i)
+        for(var i = 0; i < lvlSize; ++i)
         {
             Instantiate(hardWall, new Vector3(14f + i, 0f, 6f), Quaternion.identity);
             Instantiate(hardWall, new Vector3(14f + i, 0f, -6f), Quaternion.identity);

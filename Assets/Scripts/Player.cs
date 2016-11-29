@@ -39,25 +39,25 @@ public class Player : MonoBehaviour
 
     void WaitForMove()
     {
-        if (!colTriUp.softWallTouch && !colTriUp.playerTouch && !colTriUp.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].up))
+        if (!colTriUp.bombTouch && !colTriUp.softWallTouch && !colTriUp.playerTouch && !colTriUp.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].up))
         {
             moving = true;
             target = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1f);
         }
 
-        if (!colTriDown.softWallTouch && !colTriDown.playerTouch && !colTriDown.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].down))
+        if (!colTriDown.bombTouch && !colTriDown.softWallTouch && !colTriDown.playerTouch && !colTriDown.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].down))
         {
             moving = true;
             target = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f);
         }
 
-        if (!colTriLeft.softWallTouch && !colTriLeft.playerTouch && !colTriLeft.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].left))
+        if (!colTriLeft.bombTouch && !colTriLeft.softWallTouch && !colTriLeft.playerTouch && !colTriLeft.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].left))
         {
             moving = true;
             target = new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z);
         }
 
-        if (!colTriRight.softWallTouch && !colTriRight.playerTouch && !colTriRight.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].right))
+        if (!colTriRight.bombTouch && !colTriRight.softWallTouch && !colTriRight.playerTouch && !colTriRight.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].right))
         {
             moving = true;
             target = new Vector3(transform.position.x + 1f, transform.position.y, transform.position.z);
@@ -77,7 +77,7 @@ public class Player : MonoBehaviour
         if(!moving && Input.GetKeyDown(mainController.playersKeys[playerNumber].putBomb) && bombsOnMap < bombsLimit)
         {
             GameObject bombObj = Instantiate(bomb, transform.position, Quaternion.identity) as GameObject;
-            bombObj.GetComponent<Bomb>().SetUpOwner(gameObject);
+            bombObj.GetComponent<Bomb>().SetUpOwner(gameObject, 1);
             ++bombsOnMap;
         }
     }
