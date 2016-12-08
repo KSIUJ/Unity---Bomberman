@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class GameController : MonoBehaviour
 {
+	public Material[] 		bombermanMaterials;
     public int              lvlSize;
     public int              playersNumber;
     public GameObject       hardWall;
@@ -56,7 +57,7 @@ public class GameController : MonoBehaviour
         if (playersNumber >= 1)
         {
             GameObject playerObj = Instantiate(player, new Vector3(1f, 0f, 5f), Quaternion.identity) as GameObject;
-            playerObj.GetComponent<MeshRenderer>().material.color = Color.red;
+			playerObj.GetComponent<Player> ().bombermanModel.GetComponent<SkinnedMeshRenderer> ().material = bombermanMaterials [0];
             playerObj.GetComponent<Player>().playerNumber = 0;
         }
             
@@ -64,7 +65,7 @@ public class GameController : MonoBehaviour
         if (playersNumber >= 2)
         {
             GameObject playerObj = Instantiate(player, new Vector3(1f, 0f, -5f), Quaternion.identity) as GameObject;
-            playerObj.GetComponent<MeshRenderer>().material.color = Color.blue;
+			playerObj.GetComponent<Player> ().bombermanModel.GetComponent<SkinnedMeshRenderer> ().material = bombermanMaterials [1];
             playerObj.GetComponent<Player>().playerNumber = 1;
         }
             
@@ -72,7 +73,7 @@ public class GameController : MonoBehaviour
         if (playersNumber >= 3)
         {
             GameObject playerObj = Instantiate(player, new Vector3(13f + lvlSize, 0f, 5f), Quaternion.identity) as GameObject;
-            playerObj.GetComponent<MeshRenderer>().material.color = Color.green;
+			playerObj.GetComponent<Player> ().bombermanModel.GetComponent<SkinnedMeshRenderer> ().material = bombermanMaterials [2];
             playerObj.GetComponent<Player>().playerNumber = 2;
         }
             
@@ -80,7 +81,7 @@ public class GameController : MonoBehaviour
         if (playersNumber >= 4)
         {
             GameObject playerObj = Instantiate(player, new Vector3(13f + lvlSize, 0f, -5f), Quaternion.identity) as GameObject;
-            playerObj.GetComponent<MeshRenderer>().material.color = Color.yellow;
+			playerObj.GetComponent<Player> ().bombermanModel.GetComponent<SkinnedMeshRenderer> ().material = bombermanMaterials [3];
             playerObj.GetComponent<Player>().playerNumber = 3;
         }
             

@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
     public ColisionTrigger  colTriLeft;
     public ColisionTrigger  colTriRight;
 
+	public GameObject 		bombermanModel;
+	public GameObject 		bombermanBoy;
     public GameObject       bomb;
 
     private MainController  mainController;
@@ -43,24 +45,29 @@ public class Player : MonoBehaviour
         {
             moving = true;
             target = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1f);
+			bombermanBoy.transform.localRotation = Quaternion.Euler (0f, 0f, 0f);
         }
 
         if (!colTriDown.bombTouch && !colTriDown.softWallTouch && !colTriDown.playerTouch && !colTriDown.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].down))
         {
             moving = true;
             target = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f);
+			bombermanBoy.transform.rotation = Quaternion.Euler (0f, 180f, 0f);
+
         }
 
         if (!colTriLeft.bombTouch && !colTriLeft.softWallTouch && !colTriLeft.playerTouch && !colTriLeft.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].left))
         {
             moving = true;
             target = new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z);
+			bombermanBoy.transform.localRotation = Quaternion.Euler (0f, 270f, 0f);
         }
 
         if (!colTriRight.bombTouch && !colTriRight.softWallTouch && !colTriRight.playerTouch && !colTriRight.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].right))
         {
             moving = true;
             target = new Vector3(transform.position.x + 1f, transform.position.y, transform.position.z);
+			bombermanBoy.transform.localRotation = Quaternion.Euler (0f, 90f, 0f);
         }
     }
 
