@@ -5,7 +5,6 @@ public class Player : MonoBehaviour
 {
     public int              playerNumber;
     public float            playerSpeed;
-
     public ColisionTrigger  colTriUp;
     public ColisionTrigger  colTriDown;
     public ColisionTrigger  colTriLeft;
@@ -16,10 +15,12 @@ public class Player : MonoBehaviour
     public GameObject       bomb;
 
     private MainController  mainController;
+    private HashIDs         hashIds;
     private bool            moving;
     private Vector3         target;
     private int             bombsOnMap;
     private int             bombsLimit;
+    private Animator        animator;
 
     void Awake()
     {
@@ -27,6 +28,8 @@ public class Player : MonoBehaviour
         mainController  = GameObject.FindGameObjectWithTag(Tags.mainController).GetComponent<MainController>();
         bombsOnMap      = 0;
         bombsLimit      = 1;
+        animator        = bombermanBoy.GetComponent<Animator>();
+        hashIds         = GameObject.FindGameObjectWithTag(Tags.mainController).GetComponent<HashIDs>();
     }
 
     void Update()
@@ -46,6 +49,7 @@ public class Player : MonoBehaviour
             moving = true;
             target = new Vector3(transform.position.x, transform.position.y, transform.position.z + 1f);
 			bombermanBoy.transform.localRotation = Quaternion.Euler (0f, 0f, 0f);
+            animator.SetBool(hashIds.walkingBool, true);
         }
 
         if (!colTriDown.bombTouch && !colTriDown.softWallTouch && !colTriDown.playerTouch && !colTriDown.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].down))
@@ -53,7 +57,7 @@ public class Player : MonoBehaviour
             moving = true;
             target = new Vector3(transform.position.x, transform.position.y, transform.position.z - 1f);
 			bombermanBoy.transform.rotation = Quaternion.Euler (0f, 180f, 0f);
-
+            animator.SetBool(hashIds.walkingBool, true);
         }
 
         if (!colTriLeft.bombTouch && !colTriLeft.softWallTouch && !colTriLeft.playerTouch && !colTriLeft.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].left))
@@ -61,6 +65,7 @@ public class Player : MonoBehaviour
             moving = true;
             target = new Vector3(transform.position.x - 1f, transform.position.y, transform.position.z);
 			bombermanBoy.transform.localRotation = Quaternion.Euler (0f, 270f, 0f);
+            animator.SetBool(hashIds.walkingBool, true);
         }
 
         if (!colTriRight.bombTouch && !colTriRight.softWallTouch && !colTriRight.playerTouch && !colTriRight.hardWallTouch && Input.GetKey(mainController.playersKeys[playerNumber].right))
@@ -68,6 +73,7 @@ public class Player : MonoBehaviour
             moving = true;
             target = new Vector3(transform.position.x + 1f, transform.position.y, transform.position.z);
 			bombermanBoy.transform.localRotation = Quaternion.Euler (0f, 90f, 0f);
+            animator.SetBool(hashIds.walkingBool, true);
         }
     }
 
@@ -76,7 +82,19 @@ public class Player : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, target, playerSpeed * Time.deltaTime);
 
         if (transform.position == target)
+        {
             moving = false;
+            StartCoroutine(StopMovingAnimation());
+        }
+
+    }
+
+    IEnumerator StopMovingAnimation()
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        if(!moving)
+            animator.SetBool(hashIds.walkingBool, false);
     }
 
     void WaitForBomb()
